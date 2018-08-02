@@ -20,11 +20,12 @@
 
     <ol v-else class="MyList">
         <li v-for="user of users">
-            <div v-if="editMode" class="inline-edit">
-
+            <div v-if="user.edit" class="inline-edit">
+                <input type="text" placeholder="Name" v-model="user.name"> <input type="email" placeholder="Email" v-model="user.email">
+                <input type="button" value="Update" class="save" @click="updateUser(user)"> <input type="button" value="Cancel" class="cancel" @click="noEditMode(user)">
             </div>
-            <div class="user-details">
-                {{user.name}} | <a :href="'mailto:'+user.email">{{user.email}}</a> | <button class="delete" @click="deleteUser(user)">X</button>
+            <div v-else class="user-details">
+                {{user.name}} | <a :href="'mailto:'+user.email">{{user.email}}</a> | <button class="delete" @click="deleteUser(user)">X</button> <button class="edit" @click="editMode(user)">Edit</button>
             </div>
         </li>
     </ol>
@@ -40,9 +41,8 @@ export default {
   data() {
     return {
       users: {},
-      user: { name: "", email: "" },
-      userForm: false,
-      editMode: false
+      user: { name: "", email: "", edit: null },
+      userForm: false
     };
   },
   firebase: {
@@ -62,13 +62,30 @@ export default {
       this.$firebaseRefs.users
         .push({
           name: this.user.name,
-          email: this.user.email
+          email: this.user.email,
+          edit: this.user.edit
         })
         .then(
           (this.user.name = ""),
           (this.user.email = ""),
+          (this.user.edit = false),
           (this.userForm = false)
         );
+    },
+    editMode(user){
+        this.$firebaseRefs.users.child(user['.key']).child('edit').set(true);
+    },
+    noEditMode(user){
+        this.$firebaseRefs.users.child(user['.key']).child('edit').set(false);
+    },
+    updateUser(user){
+        const copy = {...user}
+        // remove the .key attribute
+        delete copy['.key']
+        
+        this.$firebaseRefs.users.child(user['.key']).set(copy)
+        
+        this.$firebaseRefs.users.child(user['.key']).child('edit').set(false);
     },
     deleteUser(user) {
       this.$firebaseRefs.users.child(user[".key"]).remove();
@@ -116,10 +133,19 @@ a {
   margin: 3px;
   cursor: pointer;
 }
-.delete {
+.edit,
+.delete,
+.save,
+.cancel {
   background: #fff;
   border: 1px solid #ddd;
   margin-left: 15px;
   cursor: pointer;
+}
+
+.inline-edit{
+    input{
+        margin-right: 5px;
+    }
 }
 </style>
