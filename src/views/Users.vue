@@ -11,7 +11,7 @@
                 <input type="email" id="email" v-model="user.email" placeholder="Email">
             </label>
             <br>
-            <button type="submit" class="btn">Save</button>
+            <button type="submit" class="btn">Save</button> <button @click="userForm = false"  class="btn">Cancel</button>
         </form>
     </div>
     <div v-if="users.length < 1">
@@ -20,7 +20,12 @@
 
     <ol v-else class="MyList">
         <li v-for="user of users">
-            {{user.name}} | <a :href="'mailto:'+user.email">{{user.email}}</a> | <button class="delete" @click="deleteUser(user)">X</button>
+            <div v-if="editMode" class="inline-edit">
+
+            </div>
+            <div class="user-details">
+                {{user.name}} | <a :href="'mailto:'+user.email">{{user.email}}</a> | <button class="delete" @click="deleteUser(user)">X</button>
+            </div>
         </li>
     </ol>
 </div>
@@ -36,7 +41,8 @@ export default {
     return {
       users: {},
       user:{'name':'', 'email':''},
-      userForm: false
+      userForm: false,
+      editMode: false
     };
   },
   firebase: {
@@ -58,7 +64,8 @@ export default {
               email: this.user.email
           }).then(
               this.user.name = '',
-              this.user.email = ''
+              this.user.email = '',
+              this.userForm = false
           )
       },
       deleteUser(user){
@@ -101,10 +108,10 @@ a{
     color: #eee;
     background: #42b983;
     border: 1px solid #42b983;
-    padding: 5px 35px;
+    padding: 5px 25px;
     border-radius: 2px;
     vertical-align: middle;
-    margin: 3px 0;
+    margin: 3px;
     cursor: pointer;
 }
 .delete{
