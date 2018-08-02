@@ -40,7 +40,7 @@ export default {
   data() {
     return {
       users: {},
-      user:{'name':'', 'email':''},
+      user: { name: "", email: "" },
       userForm: false,
       editMode: false
     };
@@ -54,23 +54,25 @@ export default {
       }
     }
   },
-  methods:{
-      showForm(){
-          this.userForm = true
-      },
-      addUser(){
-          this.$firebaseRefs.users.push({
-              name: this.user.name,
-              email: this.user.email
-          }).then(
-              this.user.name = '',
-              this.user.email = '',
-              this.userForm = false
-          )
-      },
-      deleteUser(user){
-           this.$firebaseRefs.users.child(user['.key']).remove()
-      }
+  methods: {
+    showForm() {
+      this.userForm = true;
+    },
+    addUser() {
+      this.$firebaseRefs.users
+        .push({
+          name: this.user.name,
+          email: this.user.email
+        })
+        .then(
+          (this.user.name = ""),
+          (this.user.email = ""),
+          (this.userForm = false)
+        );
+    },
+    deleteUser(user) {
+      this.$firebaseRefs.users.child(user[".key"]).remove();
+    }
   }
 };
 </script>
@@ -81,43 +83,43 @@ export default {
   display: block;
   margin: 0 auto;
 }
-.MyList{
-    text-align: left;
-    >li{
-        margin-bottom: 10px;
-    }
+.MyList {
+  text-align: left;
+  > li {
+    margin-bottom: 10px;
+  }
 }
-a{
-    color:#42b983;
+a {
+  color: #42b983;
 }
-.link{
-    color:#42b983;
-    margin-bottom:15px;
-    display: block; 
-    cursor: pointer;
+.link {
+  color: #42b983;
+  margin-bottom: 15px;
+  display: block;
+  cursor: pointer;
 }
-.form-area{
-    max-width: 300px;
-    margin: 10px auto;
-    input{
-        margin: 10px 0;
-        padding: 5px;
-    }
+.form-area {
+  max-width: 300px;
+  margin: 10px auto;
+  input {
+    margin: 10px 0;
+    padding: 5px;
+  }
 }
-.btn{
-    color: #eee;
-    background: #42b983;
-    border: 1px solid #42b983;
-    padding: 5px 25px;
-    border-radius: 2px;
-    vertical-align: middle;
-    margin: 3px;
-    cursor: pointer;
+.btn {
+  color: #eee;
+  background: #42b983;
+  border: 1px solid #42b983;
+  padding: 5px 25px;
+  border-radius: 2px;
+  vertical-align: middle;
+  margin: 3px;
+  cursor: pointer;
 }
-.delete{
-    background: #fff;
-    border: 1px solid #ddd;
-    margin-left: 15px;
-    cursor: pointer;
+.delete {
+  background: #fff;
+  border: 1px solid #ddd;
+  margin-left: 15px;
+  cursor: pointer;
 }
 </style>
