@@ -11,7 +11,7 @@
                 <input type="email" id="email" v-model="user.email" placeholder="Email">
             </label>
             <br>
-            <button type="submit" class="btn">Save</button> <button @click="userForm = false"  class="btn">Cancel</button>
+            <button type="submit" class="btn">Save</button> <button @click="userForm = false" type="button"  class="btn">Cancel</button>
         </form>
     </div>
     <div v-if="users.length < 1">
