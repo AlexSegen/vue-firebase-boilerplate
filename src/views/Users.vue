@@ -20,7 +20,7 @@
 
     <ol v-else class="MyList">
         <li v-for="user of users">
-            {{user.name}} | <a :href="'mailto:'+user.email">{{user.email}}</a>
+            {{user.name}} | <a :href="'mailto:'+user.email">{{user.email}}</a> | <button class="delete" @click="deleteUser(user)">X</button>
         </li>
     </ol>
 </div>
@@ -60,6 +60,9 @@ export default {
               this.user.name = '',
               this.user.email = ''
           )
+      },
+      deleteUser(user){
+           this.$firebaseRefs.users.child(user['.key']).remove()
       }
   }
 };
@@ -102,6 +105,12 @@ a{
     border-radius: 2px;
     vertical-align: middle;
     margin: 3px 0;
+    cursor: pointer;
+}
+.delete{
+    background: #fff;
+    border: 1px solid #ddd;
+    margin-left: 15px;
     cursor: pointer;
 }
 </style>
